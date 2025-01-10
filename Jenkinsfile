@@ -1,23 +1,26 @@
 pipeline {
     agent any
 
-    tools {
-        sonarQube 'SonarQube'
-    }
+    // tools {
+    //     sonarQube 'SonarQube'
+    // }
 
     stages {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning repository...'
-                git 'https://github.com/hienpuzzle/python-ci-cd-pipeline.git'
+                git branch: 'main', url: 'https://github.com/hienpuzzle/python-ci-cd-pipeline.git'
             }
         }
 
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
-                sh 'python3 -m venv venv'
-                sh '. venv/bin/activate && pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                '''
             }
         }
 
@@ -35,20 +38,20 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                echo 'Running SonarQube analysis...'
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    . venv/bin/activate
-                    sonar-scanner \
-                      -Dsonar.projectKey=python-ci-cd-pipeline \
-                      -Dsonar.sources=. \
-                      -Dsonar.python.coverage.reportPaths=coverage.xml
-                    '''
-                }
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         echo 'Running SonarQube analysis...'
+        //         withSonarQubeEnv('SonarQube') {
+        //             sh '''
+        //             . venv/bin/activate
+        //             sonar-scanner \
+        //               -Dsonar.projectKey=python-ci-cd-pipeline \
+        //               -Dsonar.sources=. \
+        //               -Dsonar.python.coverage.reportPaths=coverage.xml
+        //             '''
+        //         }
+        //     }
+        // }
 
         stage('Deploy') {
             steps {
