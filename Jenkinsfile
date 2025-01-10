@@ -27,7 +27,7 @@ pipeline {
         stage('Linting') {
             steps {
                 echo 'Running flake8 for linting...'
-                sh '. venv/bin/activate && flake8 .'
+                sh '. venv/bin/activate && flake8 src/ && flake8 tests/'
             }
         }
 
