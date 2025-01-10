@@ -56,6 +56,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Python application...'
+                sh '. venv/bin/activate && python3 src/app.py'
             }
         }
     }
